@@ -1,0 +1,17 @@
+{
+  "id": "honey-badger",
+  "title": "Honey Badger",
+  "description": "<p>Adds badges to tokens</p>",
+  "authors": [
+    {
+      "name": "Michael Cooper",
+      "email": "me@mythmon.com"
+    }
+  ],
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": "14",
+    "verified": "14"
+  },
+  "esmodules": ["scripts/module.js"]
+}
