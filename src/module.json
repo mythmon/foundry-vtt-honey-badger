@@ -13,5 +13,5 @@
     "minimum": "14",
     "verified": "14"
   },
-  "esmodules": ["scripts/module.js"]
+  "esmodules": []
 }

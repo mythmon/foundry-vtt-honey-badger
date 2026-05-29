@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+: "${DEPLOY_HOST:?DEPLOY_HOST must be set in .mise.local.toml}"
+: "${DEPLOY_PATH:?DEPLOY_PATH must be set in .mise.local.toml}"
+
+npm run build
+
+tar -czf honey-badger.tar.gz -C dist .
+
+deploy_parent=$(dirname "$DEPLOY_PATH")
+scp honey-badger.tar.gz "$DEPLOY_HOST:$deploy_parent/honey-badger.tar.gz"
+
+ssh "$DEPLOY_HOST" bash -s <<ENDSSH
+set -e
+${DEPLOY_UMASK:+umask $DEPLOY_UMASK}
+tmp=\$(mktemp -d -p "$deploy_parent")
+tar -xzf "$deploy_parent/honey-badger.tar.gz" -C "\$tmp"
+rm -rf "$DEPLOY_PATH"
+mv "\$tmp" "$DEPLOY_PATH"
+rm -f "$deploy_parent/honey-badger.tar.gz"
+ENDSSH
+
+rm honey-badger.tar.gz

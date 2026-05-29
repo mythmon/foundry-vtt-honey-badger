@@ -1,0 +1,11 @@
+[env]
+# user@host for the Foundry VTT server
+DEPLOY_HOST = ""
+# absolute path to the module directory on the remote, e.g. /home/user/foundrydata/Data/modules/honey-badger
+DEPLOY_PATH = ""
+# optional umask applied during extraction, e.g. "022" for rwxr-xr-x dirs / rw-r--r-- files
+DEPLOY_UMASK = ""
+
+[tasks.build]
+description = "Compile TypeScript and copy assets to dist/"
+run = "npm run build"

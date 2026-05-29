@@ -7,9 +7,13 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@league-of-foundry-developers/foundry-vtt-types": "^13.346.0-beta.20250812191140",
+    "@types/invariant": "^2.2.37",
+    "fvtt-types": "github:League-of-Foundry-Developers/foundry-vtt-types#main",
     "rollup-plugin-copy": "^3.5.0",
     "typescript": "^5.9.3",
     "vite": "^8.0.14"
+  },
+  "dependencies": {
+    "invariant": "^2.2.4"
   }
 }

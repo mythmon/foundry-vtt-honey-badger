@@ -1,5 +1,25 @@
-import copy from "rollup-plugin-copy";
+import fs from "fs";
 import { defineConfig } from "vite";
+
+function moduleJsonPlugin() {
+  return {
+    name: "module-json",
+    generateBundle(_options, bundle) {
+      const entryFiles = Object.values(bundle)
+        .filter(chunk => chunk.type === "chunk" && chunk.isEntry)
+        .map(chunk => chunk.fileName);
+
+      const moduleJson = JSON.parse(fs.readFileSync("src/module.json", "utf-8"));
+      moduleJson.esmodules = entryFiles;
+
+      this.emitFile({
+        type: "asset",
+        fileName: "module.json",
+        source: JSON.stringify(moduleJson, null, 2),
+      });
+    },
+  };
+}
 
 export default defineConfig({
   build: {
@@ -7,19 +27,14 @@ export default defineConfig({
     cleanDir: true,
     sourcemap: true,
     rolldownOptions: {
-      input: "src/ts/module.ts",
+      input: "src/ts/main.ts",
       output: {
         preserveModules: true,
-        dir: "dist/scripts",
+        dir: "dist",
         entryFileNames: "[name].js",
         format: "es",
       }
     },
   },
-  plugins: [
-    copy({
-      targets: [{ src: "src/module.json", dest: "dist" }],
-      hook: "writeBundle",
-    }),
-  ],
+  plugins: [moduleJsonPlugin()],
 });
