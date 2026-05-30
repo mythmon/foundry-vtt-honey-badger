@@ -28,6 +28,16 @@ Hooks.on("canvasReady", () => {
   badgeAllTokens();
 });
 
+Hooks.on("updateToken", (tokenDocument, changes) => {
+  if (!("name" in changes)) return;
+  const token = tokenDocument.id ? canvas.tokens?.get(tokenDocument.id) : null;
+  if (!token) return;
+  token.getChildByName(BADGE_NAME)?.destroy();
+  maybeDrawBadge({ token });
+});
+
+const BADGE_NAME = "honey-badger-badge";
+
 function parseTokenTag(s: string): string | null {
   let match = s.match(/\((.*)\)\s*$/);
   return match?.[1] ?? null;
@@ -51,7 +61,6 @@ function maybeDrawBadge({
   const badgeText = parseTokenTag(token.name);
   if (!badgeText) return;
 
-  const BADGE_NAME = "honey-badger-badge";
   if (token.getChildByName(BADGE_NAME)) return;
 
   const dims = getTokenDimensions(token);
