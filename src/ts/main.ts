@@ -56,23 +56,33 @@ function maybeDrawBadge({
 
   const dims = getTokenDimensions(token);
   const gridSize = canvas.grid?.size ?? 100;
+  const pip = gridSize / 100;
   const container = new PIXI.Container();
   container.name = BADGE_NAME;
   container.zIndex = 100;
   const scale = dims.scale > 1 ? Math.pow(dims.scale, 0.7) : 1;
 
-  container.x = dims.width - gridSize * 0.2 * dims.scale;
-  container.y = dims.height - gridSize * 0.1 - gridSize * 0.2 * dims.scale;
+  container.x = dims.width - 20 * pip * dims.scale;
+  container.y = dims.height - 10 * pip - 20 * pip * dims.scale;
+
+  const shadow = new PIXI.Graphics();
+  shadow.beginFill(0x000000);
+  shadow.drawCircle(2 * pip, 2 * pip, 16 * pip * scale);
+  shadow.alpha = 0.5;
+  const blur = new PIXI.BlurFilter();
+  blur.blur = 6 * pip;
+  shadow.filters = [blur];
+  container.addChild(shadow);
 
   const bg = new PIXI.Graphics();
   bg.beginFill(0x404040);
-  bg.drawCircle(0, 0, 15 * scale);
+  bg.drawCircle(0, 0, 15 * pip * scale);
   bg.beginFill(0xa0a0a0);
-  bg.drawCircle(0, 0, 12 * scale);
+  bg.drawCircle(0, 0, 13 * pip * scale);
   container.addChild(bg);
 
   const text = new PIXI.Text(badgeText, {
-    fontSize: 18 * scale,
+    fontSize: 18 * pip * scale,
     fill: "black",
     align: "center",
   });
